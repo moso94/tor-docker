@@ -1,5 +1,8 @@
 version: "3.7"
 
+volumes:
+  tor:
+
 services:
   tor:
     build:
@@ -7,6 +10,8 @@ services:
       context: .
     restart: always
     image: job-crawler-tor
+    volumes:
+      - tor:/home/tor/.tor
     ports:
       - 9150:9150
       - 9151:9151

@@ -1,83 +1,7 @@
 image: python:3.6-alpine
 
 stages:
-  # - install
-  # - test
-  # - report
   - build
-
-# workflow:
-#   rules:
-#     - if: $CI_MERGE_REQUEST_ID
-#       when: never
-#     - when: always
-
-# variables: &gloabl_variables
-#   PIPENV_VENV_IN_PROJECT: "1"
-#   PIPENV_DONT_LOAD_ENV: "1"
-
-# cache: &global_cache
-#   key:
-#     files:
-#       - Pipfile.lock
-#   paths:
-#     - .venv
-#   policy: pull
-
-# install:
-#   stage: install
-#   script:
-#     - pip install pipenv
-#     - apk add --no-cache pcre-dev zlib-dev jpeg-dev tzdata linux-headers musl-dev g++ gcc
-#     - pipenv install --dev --deploy
-#   cache:
-#     <<: *global_cache
-#     policy: push
-#   rules:
-#     - changes:
-#         - Pipfile.lock
-#       when: always
-
-# .test_template: &test_template
-#   stage: test
-#   before_script:
-#     - pip install pipenv
-#     - cp .build/test.env .env
-
-# test:
-#   <<: *test_template
-#   variables:
-#     <<: *gloabl_variables
-#     POSTGRES_DB: jobCrawler
-#     POSTGRES_USER: job
-#     POSTGRES_PASSWORD: job
-#   services:
-#     - postgres:11-alpine
-#     - redis:5.0-alpine
-#   script:
-#     - apk add --no-cache pcre-dev zlib-dev jpeg-dev tzdata
-#     - pipenv run coverage run manage.py test --noinput
-#     - pipenv run coverage report --show-missing --skip-covered
-#   artifacts:
-#     expire_in: 1 day
-#     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
-#     paths:
-#       - .coverage
-
-# lint:
-#   <<: *test_template
-#   script:
-#     - pipenv run flake8
-#   dependencies: []
-
-# coverage:
-#   <<: *test_template
-#   stage: report
-#   coverage: /^TOTAL:([^%]+)/
-#   script:
-#     - pipenv run coverage report | grep TOTAL | awk '{ print "TOTAL:"$6; }'
-#   only:
-#     - master
 
 build:
   image: docker:stable
@@ -91,7 +15,6 @@ build:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    # - docker pull $APP_LAST || true
     - docker build --pull --cache-from $APP_LAST --tag $APP_TAG --tag $APP_LAST -f ./Dockerfile .
     - docker push $APP_TAG
     - docker push $APP_LAST
