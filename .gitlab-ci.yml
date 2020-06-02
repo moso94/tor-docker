@@ -88,8 +88,8 @@ build:
     APP_TAG: $CI_REGISTRY_IMAGE/app:$CI_COMMIT_SHA
     APP_LAST: $CI_REGISTRY_IMAGE/app:latest
   stage: build
-  # before_script:
-  #   - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     # - docker pull $APP_LAST || true
     - docker build --pull --cache-from $APP_LAST --tag $APP_TAG --tag $APP_LAST -f ./Dockerfile .
