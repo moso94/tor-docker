@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  tor:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    restart: always
+    image: job-crawler-tor
+    ports:
+      - 9150:9150
+      - 9151:9151
+    # depends_on:
+    #   - mongo
+    #   - redis
+    # networks:
+    #   - web
